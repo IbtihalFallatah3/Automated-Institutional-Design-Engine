@@ -1,0 +1,163 @@
+[
+  {
+    "slug": "org01",
+    "name_ar": "أمانة منطقة المدينه المنورة",
+    "variants": {
+      "white": "org01_white.png",
+      "primary": "org01_primary.png"
+    }
+  },
+  {
+    "slug": "org02",
+    "name_ar": "الدفاع المدني",
+    "variants": {
+      "white": "org02_white.png",
+      "primary": "org02_primary.png"
+    }
+  },
+  {
+    "slug": "org03",
+    "name_ar": "المركز الوطني لإدارة النفايات(موان)",
+    "variants": {
+      "primary": "org03_primary.png"
+    }
+  },
+  {
+    "slug": "org04",
+    "name_ar": "المركز الوطني للرقابة على الالتزام البيئي",
+    "variants": {
+      "primary": "org04_primary.png"
+    }
+  },
+  {
+    "slug": "org05",
+    "name_ar": "الهيئة السعودية للسياحة",
+    "variants": {
+      "primary": "org05_primary.png"
+    }
+  },
+  {
+    "slug": "org06",
+    "name_ar": "امارة منطقة المدينه المنورة",
+    "variants": {
+      "primary": "org06_primary.png"
+    }
+  },
+  {
+    "slug": "org07",
+    "name_ar": "برنامج جودة الحياة",
+    "variants": {
+      "primary": "org07_primary.png"
+    }
+  },
+  {
+    "slug": "org08",
+    "name_ar": "رؤية السعودية",
+    "variants": {
+      "white": "org08_white.png",
+      "primary": "org08_primary.png"
+    }
+  },
+  {
+    "slug": "org09",
+    "name_ar": "روح السعودية",
+    "variants": {
+      "white": "org09_white.png",
+      "primary": "org09_primary.png",
+      "primary_alt": "org09_primary_alt.png"
+    }
+  },
+  {
+    "slug": "org10",
+    "name_ar": "سدايا",
+    "variants": {
+      "primary": "org10_primary.png"
+    }
+  },
+  {
+    "slug": "org11",
+    "name_ar": "غرفة المدينة المنورة",
+    "variants": {
+      "primary": "org11_primary.png",
+      "gray": "org11_gray.png"
+    }
+  },
+  {
+    "slug": "org12",
+    "name_ar": "هيئة الزكاة و الضريبة و الجمارك",
+    "variants": {
+      "primary": "org12_primary.png",
+      "white": "org12_white.png"
+    }
+  },
+  {
+    "slug": "org13",
+    "name_ar": "هيئة الصحة العامة(وقاية)",
+    "variants": {
+      "primary": "org13_primary.png"
+    }
+  },
+  {
+    "slug": "org14",
+    "name_ar": "هيئة الهلال الاحمر",
+    "variants": {
+      "primary": "org14_primary.png"
+    }
+  },
+  {
+    "slug": "org15",
+    "name_ar": "هيئة تطوير منطقة المدينة المنورة",
+    "variants": {
+      "primary": "org15_primary.png",
+      "white": "org15_white.png"
+    }
+  },
+  {
+    "slug": "org16",
+    "name_ar": "وزارة البلديات و الاسكان",
+    "variants": {
+      "white": "org16_white.png",
+      "primary": "org16_primary.png"
+    }
+  },
+  {
+    "slug": "org17",
+    "name_ar": "وزارة البيئه و المياه و الزراعه",
+    "variants": {
+      "white": "org17_white.png",
+      "primary": "org17_primary.png",
+      "black": "org17_black.png",
+      "gray": "org17_gray.png"
+    }
+  },
+  {
+    "slug": "org18",
+    "name_ar": "وزارة الثقافة",
+    "variants": {
+      "white": "org18_white.png",
+      "primary": "org18_primary.png"
+    }
+  },
+  {
+    "slug": "org19",
+    "name_ar": "وزارة الداخلية",
+    "variants": {
+      "primary": "org19_primary.png"
+    }
+  },
+  {
+    "slug": "org20",
+    "name_ar": "وزارة الرياضة",
+    "variants": {
+      "white": "org20_white.png",
+      "primary": "org20_primary.png"
+    }
+  },
+  {
+    "slug": "org21",
+    "name_ar": "وزارة الصحة",
+    "variants": {
+      "primary": "org21_primary.png"
+    }
+  }
+]
