@@ -1,0 +1,98 @@
+{
+  "version": "13.0",
+  "canvas": {
+    "width": 800,
+    "height": 1422,
+    "note": "Matches the native size of the real reference posters exactly, so proportions transfer directly instead of being re-derived at a different scale."
+  },
+
+  "_why_this_exists": "Two separate jobs. (1) VOCABULARY: a closed set of values the LLM picks from when writing a design brief -- it never invents a value, so every possible brief maps to something actually implemented. (2) TOKENS: fixed spacing/type scales, so nothing is an arbitrary hand-picked number. Earlier versions failed on both: the LLM had no say in visual direction, and CSS values were ad-hoc (8,10,14,16,18,20,22,24,26 scattered across rules), which is a large part of why output read as generic.",
+
+  "tokens": {
+    "spacing": {
+      "_note": "Everything on the poster uses ONE of these. No in-between values.",
+      "xs": 8, "sm": 16, "md": 24, "lg": 40, "xl": 64, "xxl": 104
+    },
+    "type_scale": {
+      "_note": "Deliberately DRAMATIC ratios (title is 4-6x body, not 2x) -- the values render.js actually uses per layout_family are now hardcoded per family to match their specific reference poster, but stay within this same scale.",
+      "display": 96,
+      "title": 58,
+      "heading": 34,
+      "subtitle": 22,
+      "body": 15,
+      "caption": 12
+    },
+    "line_height": { "tight": 1.15, "normal": 1.45, "loose": 1.75 },
+    "radius": {
+      "_note": "Small. References are mostly flat/sharp; heavy rounding reads as dated.",
+      "none": 0, "sm": 4, "md": 10, "pill": 999
+    },
+    "shadow": {
+      "_note": "Used sparingly and only where a real element floats above another. Earlier versions added shadows to compensate for flat layouts -- that is the wrong instinct.",
+      "none": "none",
+      "soft": "0 10px 30px rgba(15,20,25,0.14)",
+      "lifted": "0 20px 44px rgba(15,20,25,0.24)"
+    }
+  },
+
+  "composition_rules": {
+    "_note": "v13 tried to teach these as AI-followed RULES (leave a third empty, anchor to one edge...) and the model didn't reliably apply them -- output still read as generic. v14 bakes them into the fixed geometry of each layout_family instead (see render.js): the model can no longer under- or over-apply restraint because it no longer controls spacing at all, only content. This block is now documentation of what's baked in, not an instruction the model reads.",
+    "min_empty_ratio": 0.30,
+    "text_alignment": "anchor_one_edge",
+    "max_accent_colors": 2
+  },
+
+  "vocabulary": {
+    "_note": "The LLM picks ONE value per field. Anything outside these lists is rejected and falls back to a safe default. layout_family is the only field that affects LAYOUT -- once picked, every position/size/decoration for that family is fixed in render.js, measured directly off the specific reference poster(s) named below. The model supplies content (text/photo/palette) into that fixed template; it does not author spacing, sizing, or ornament choices any more (that discretion is what made v13's output read as generic 'a design' instead of this organisation's actual design).",
+
+    "layout_family": {
+      "_note": "Picked BEFORE anything else -- the single biggest lever on whether a poster looks like this organisation's work. Each entry names the exact reference(s) it was measured from; open backend/references/<file> to see the source.",
+      "photo_band": "Full-bleed photo on the top 76% of the canvas, a solid colour band (palette base) on the bottom 24%, title straddling the seam. Default choice for a single product/subject with a short supporting paragraph -- produce, a place, an object, a short announcement. Measured from ref_01.jpg.",
+      "full_bleed_photo": "Photo fills the whole canvas, text in the photo's quiet zone carried by type weight, no band, no card. Reserve for strong atmospheric/scenic photography where the photo itself is the whole statement. Measured from ref_03.jpg / ref_06.jpg.",
+      "stat_grid": "Headline, then a 2-4 tile grid -- each tile a cream caption bar (big number + label) directly above its own photo. Use only when the content genuinely has 2-4 countable achievements/facts. Measured from ref_08.jpg.",
+      "photo_feature_list": "Two-line headline, then 2-4 rows of [photo thumbnail + bold heading + one-line description]. Use when the content is a set of distinct points, not one idea. Measured from ref_12.jpg.",
+      "portrait_quote": "Portrait photo across the top ~46%, fading into the palette base colour, a large pull-quote below. Use ONLY for an attributed statement from a named person -- never invent a quote for content that isn't actually one. Measured from ref_09.jpg."
+    },
+
+    "occasion": {
+      "none": "No specific occasion -- general announcement or campaign.",
+      "ramadan": "Ramadan. Reverent, crescent/lantern-adjacent, deep tones.",
+      "eid": "Eid. Celebratory but still dignified.",
+      "national_day": "Saudi National Day (Sept 23). Green-forward, national identity.",
+      "founding_day": "Founding Day (Feb 22). Heritage/earth tones, historic character.",
+      "saudi_identity": "General Saudi identity framing without a specific date.",
+      "heritage": "Historic/archaeological/traditional subject matter.",
+      "harvest_season": "Agricultural season, harvest, produce (e.g. a dates season).",
+      "official_statement": "Leadership statement, thanks, formal announcement.",
+      "forum_event": "Conference, forum, summit, exhibition.",
+      "investment": "Investment opportunity, tender, commercial offering."
+    },
+
+    "mood": {
+      "_note": "Informs palette choice and copy tone only -- it no longer touches layout (that's fixed per layout_family now).",
+      "formal": "Institutional, restrained, high whitespace.",
+      "celebratory": "Warm, energetic, higher color saturation.",
+      "reverent": "Quiet, spacious, deep tones, minimal ornament.",
+      "energetic": "Bold type, strong contrast, tighter crops.",
+      "calm": "Soft gradients, light palette, generous space."
+    }
+  },
+
+  "palettes": {
+    "_note": "Hand-built, each capped at base + 2 accents, all derived from colors measured in the real reference posters rather than invented.",
+    "institutional_green": { "base": "#0B3D33", "accent": "#C9A55B", "surface": "#F6F4F1", "on_base": "#FFFFFF" },
+    "heritage_bronze":     { "base": "#5C3C3A", "accent": "#C08B5C", "surface": "#F2EDE4", "on_base": "#FFFFFF" },
+    "royal_maroon":        { "base": "#6B1F3A", "accent": "#C9A55B", "surface": "#F5F0E8", "on_base": "#FFFFFF" },
+    "sky_institutional":   { "base": "#1C4E80", "accent": "#FFFFFF", "surface": "#E8F0F6", "on_base": "#FFFFFF" },
+    "desert_gold":         { "base": "#7A5230", "accent": "#E0C9A6", "surface": "#FAF6EF", "on_base": "#FFFFFF" },
+    "deep_night":          { "base": "#13262C", "accent": "#D26E3C", "surface": "#F6F4F1", "on_base": "#FFFFFF" }
+  },
+
+  "defaults": {
+    "_note": "Used when the LLM is unavailable, or when it returns a value outside the vocabulary.",
+    "layout_family": "photo_band",
+    "occasion": "none",
+    "mood": "formal",
+    "palette": "institutional_green"
+  }
+}

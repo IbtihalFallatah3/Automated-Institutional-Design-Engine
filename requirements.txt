@@ -1,0 +1,13 @@
+# Minimum versions rather than hard pins, so pip can resolve wheels that
+# match your Python version (including very new ones like 3.14). Hard pins
+# to older releases force building from source, which fails on Windows.
+fastapi>=0.115
+uvicorn>=0.30
+python-multipart>=0.0.9
+requests>=2.32
+python-dotenv>=1.0
+
+# NOTE: Pillow and numpy are deliberately NOT here. v13 doesn't do any
+# image processing in Python -- uploads are copied byte-for-byte and all
+# rendering happens in the browser. If you see Pillow in an error, you're
+# installing an old requirements file.
