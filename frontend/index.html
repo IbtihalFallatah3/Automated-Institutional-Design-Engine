@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8" />
+<title>مولد الملصقات</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap">
+<link rel="stylesheet" href="/static/styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+<div class="app">
+
+  <div class="panel">
+    <div class="brandHead">
+      <img class="brandMark" src="/static/assets/brand-logo.png" alt="">
+      <div>
+        <h1>مولد الملصقات</h1>
+        <p class="sub">اكتب الموضوع، وسيتولى النموذج القراءة والتصميم والمراجعة تلقائياً.</p>
+      </div>
+    </div>
+
+    <section class="field">
+      <label for="topic">الموضوع</label>
+      <textarea id="topic" dir="rtl" rows="3" placeholder="مثال: حملة تشجير بمناسبة اليوم الوطني"></textarea>
+    </section>
+
+    <button class="btn-primary" id="genBtn">توليد الملصق</button>
+
+    <div class="statusLine">
+      <span class="statusDot" id="statusDot"></span>
+      <span id="summaryLine">لم يتم التوليد بعد</span>
+      <button class="resetPosBtn" id="resetPosBtn" style="display:none" title="التراجع عن كل تحريك يدوي للنصوص">
+        ↺ إعادة ضبط المواضع
+      </button>
+    </div>
+    <p class="sub dragHint">مرّر فوق أي نص على الملصق وستظهر مقبض صغير — اسحبه لتحريك ذلك النص، وانقر عليه مرتين لإعادة ضبطه.</p>
+    <div class="briefBox" id="criticBox" style="display:none"></div>
+
+    <section class="field">
+      <label>الصورة</label>
+      <input type="file" id="photoInput" accept="image/*" multiple style="display:none">
+      <button class="btn-ghost" id="photoBtn">رفع صورة</button>
+      <div class="thumbRow" id="thumbs"></div>
+      <p class="sub warn" id="photoWarn"></p>
+    </section>
+
+    <section class="field">
+      <label>الشعارات <span class="hint">تُوضع تلقائياً في الشريط السفلي — حتى 6 شعارات</span></label>
+      <div class="chips" id="logoChips"></div>
+    </section>
+
+    <section class="field sizeRow">
+      <div>
+        <label for="textScaleSel">حجم النص</label>
+        <select id="textScaleSel">
+          <option value="0.85">صغير</option>
+          <option value="1" selected>عادي</option>
+          <option value="1.1">كبير</option>
+          <option value="1.25">كبير جداً</option>
+        </select>
+      </div>
+      <div>
+        <label for="logoScaleSel">حجم الشعارات</label>
+        <select id="logoScaleSel">
+          <option value="0.8">صغير</option>
+          <option value="1" selected>عادي</option>
+          <option value="1.25">كبير</option>
+          <option value="1.5">كبير جداً</option>
+        </select>
+      </div>
+    </section>
+
+    <button class="btn-go" id="exportBtn">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M8 1v9m0 0L4.5 6.5M8 10l3.5-3.5M2 12.5v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-1"
+          stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      تصدير PNG
+    </button>
+
+    <details class="techDetails">
+      <summary>تفاصيل تقنية</summary>
+      <div class="field" style="margin-top:10px">
+        <label>التخطيط الذي صممه النموذج</label>
+        <div class="briefBox" id="specBox">
+          <div class="row"><span class="k">لم يُولّد بعد</span></div>
+        </div>
+      </div>
+      <label class="checkRow">
+        <input type="checkbox" id="useCritic" checked> فحص تلقائي بعد التوليد
+      </label>
+      <button class="btn-ghost" id="criticBtn" style="width:100%;margin-top:8px">إعادة فحص الجودة</button>
+    </details>
+
+    <p class="panelFoot">أمانة منطقة المدينة المنورة — أداة داخلية</p>
+  </div>
+
+  <div class="stageWrap">
+    <div class="stageScaler" id="scaler">
+      <div id="poster"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="/static/render.js"></script>
+<script src="/static/app.js"></script>
+</body>
+</html>

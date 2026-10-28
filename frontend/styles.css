@@ -1,0 +1,252 @@
+/* ============================================================
+   TOKENS -- mirrors backend/design_language.json exactly.
+   Nothing in this file uses a number that isn't from here.
+   That constraint is the fix for the "scattered/arbitrary"
+   look of earlier versions.
+   ============================================================ */
+:root {
+  --sp-xs: 8px;  --sp-sm: 16px; --sp-md: 24px;
+  --sp-lg: 40px; --sp-xl: 64px; --sp-xxl: 104px;
+
+  --fs-display: 96px; --fs-title: 58px; --fs-heading: 34px;
+  --fs-subtitle: 22px; --fs-body: 15px; --fs-caption: 12px;
+
+  --lh-tight: 1.15; --lh-normal: 1.45; --lh-loose: 1.75;
+  --r-sm: 4px; --r-md: 10px; --r-pill: 999px;
+  --sh-soft: 0 10px 30px rgba(15,20,25,0.14);
+  --sh-lifted: 0 20px 44px rgba(15,20,25,0.24);
+
+  /* set per-poster from the brief's palette */
+  --base: #0B3D33; --accent: #C9A55B; --surface: #F6F4F1; --on-base: #FFFFFF;
+
+  /* ----------------------------------------------------------------
+     UI chrome -- deliberately separate from the poster's own --base/
+     --accent above. Those two swap per-generation with whatever
+     palette the AI picked; if the control panel borrowed them
+     directly its buttons would shift color every time you generate
+     a poster in a different palette. The UI gets its own fixed,
+     single-accent system instead: institutional green for the
+     primary "create" action, the palette's gold for the "finished,
+     ready to hand off" export action -- so the two actions read as
+     visually distinct without the whole panel repainting itself.
+     ---------------------------------------------------------------- */
+  --ui-bg: #EEF1F0; --ui-panel: #fff; --ui-line: #dfe4e2;
+  --ui-ink: #16211d; --ui-muted: #667069;
+  --ui-accent: #0B3D33; --ui-accent-ink: #ffffff;
+  --ui-gold: #B8863E; --ui-gold-ink: #ffffff;
+  --ui-good: #1c7a48; --ui-warn: #9a5a1a;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--ui-bg); color: var(--ui-ink);
+  font-family: 'Tajawal', system-ui, sans-serif;
+}
+
+/* ---------------- app shell ---------------- */
+.app { display: grid; grid-template-columns: 340px 1fr; min-height: 100vh; }
+
+.panel {
+  background: var(--ui-panel); border-inline-end: 1px solid var(--ui-line);
+  padding: var(--sp-md); display: flex; flex-direction: column; gap: var(--sp-md);
+  overflow-y: auto;
+}
+
+.brandHead { display: flex; align-items: center; gap: var(--sp-sm); }
+/* Was a flat CSS gradient swatch as a placeholder -- now the organisation's
+   actual mark (assets/brand-logo.png, background keyed to transparent so
+   it sits cleanly on the panel's white background at any size). Sized a
+   little taller than the old 36px square since the real mark reads small
+   at icon size, and left un-cropped (object-fit:contain, no forced
+   aspect/border-radius) so its own irregular silhouette isn't clipped
+   into a square the way the old placeholder was. */
+.brandMark {
+  width: 40px; height: 40px; flex: none;
+  object-fit: contain;
+}
+.panel h1 { font-size: 17px; margin: 0; }
+.panel .sub { font-size: 12.5px; color: var(--ui-muted); margin: 3px 0 0; line-height: var(--lh-normal); }
+
+.field label {
+  display: block; font-size: 12px; font-weight: 700; color: var(--ui-muted);
+  margin-bottom: var(--sp-xs);
+}
+.field label .hint { font-weight: 400; text-transform: none; color: var(--ui-muted); font-size: 11.5px; }
+.sizeRow { display: flex; gap: var(--sp-sm); }
+.sizeRow > div { flex: 1; min-width: 0; }
+.sizeRow select {
+  width: 100%; font-family: inherit; font-size: 13px; font-weight: 600;
+  border: 1px solid var(--ui-line); border-radius: var(--r-md);
+  padding: 9px 10px; background: #fbfcfd; color: var(--ui-ink); cursor: pointer;
+}
+.sizeRow select:focus { outline: 2px solid var(--ui-accent); outline-offset: 1px; }
+textarea, input[type=text], select {
+  width: 100%; font-family: inherit; font-size: 14px;
+  border: 1px solid var(--ui-line); border-radius: var(--r-md);
+  padding: 10px 12px; background: #fbfcfd; resize: vertical;
+}
+textarea:focus, input:focus, select:focus { outline: 2px solid var(--ui-accent); outline-offset: 1px; }
+
+button {
+  font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+  border: none; border-radius: var(--r-md); padding: 12px var(--sp-sm);
+  transition: filter .12s ease;
+}
+button:hover:not(:disabled) { filter: brightness(1.06); }
+button:active:not(:disabled) { filter: brightness(.96); }
+.btn-primary { background: var(--ui-accent); color: var(--ui-accent-ink); }
+.btn-ghost { background: #eef1ef; color: var(--ui-ink); }
+.btn-go {
+  background: var(--ui-gold); color: var(--ui-gold-ink);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+button:disabled { opacity: .5; cursor: default; }
+
+/* compact always-visible status -- replaces a wall of raw field/value
+   rows for the common case; the full breakdown is one click away in
+   "تفاصيل تقنية" for whoever wants it. */
+.statusLine {
+  display: flex; align-items: center; gap: 8px; font-size: 13px;
+  color: var(--ui-ink); margin-top: -4px;
+}
+.statusDot { width: 8px; height: 8px; border-radius: 50%; background: var(--ui-line); flex: none; }
+.statusLine.ready .statusDot { background: var(--ui-good); }
+.resetPosBtn {
+  margin-inline-start: auto; background: none; border: none; padding: 2px 4px;
+  font-size: 11.5px; font-weight: 700; color: var(--ui-accent); cursor: pointer;
+}
+.resetPosBtn:hover { text-decoration: underline; }
+.dragHint { margin-top: -6px; }
+
+.checkRow {
+  display: flex; gap: 8px; align-items: center; margin-top: 10px;
+  font-weight: 400; font-size: 13px; color: var(--ui-ink);
+}
+
+.chips { display: flex; flex-wrap: wrap; gap: var(--sp-xs); }
+.chip {
+  display: flex; align-items: center; gap: 6px; font-size: 12px;
+  border: 1px solid var(--ui-line); border-radius: var(--r-pill);
+  padding: 6px 10px; cursor: pointer; background: #fbfcfd;
+}
+.chip.on { border-color: var(--ui-accent); background: #eaf1ee; }
+.chip img { height: 16px; }
+
+.briefBox {
+  background: #f7f9fa; border: 1px solid var(--ui-line);
+  border-radius: var(--r-md); padding: var(--sp-sm); font-size: 12px;
+  line-height: var(--lh-normal);
+}
+.briefBox .row { display: flex; justify-content: space-between; gap: var(--sp-xs); padding: 3px 0; }
+.briefBox .row + .row { border-top: 1px solid var(--ui-line); }
+.briefBox .k { color: var(--ui-muted); }
+.briefBox .v { font-weight: 700; }
+.degradedBanner {
+  background: #fbe9e0; border: 1px solid #e0b49b; border-radius: var(--r-md);
+  padding: 10px; color: var(--ui-warn); font-weight: 700; margin-bottom: 10px;
+}
+.refStrip { display: flex; gap: 6px; margin-top: var(--sp-xs); }
+.refStrip img { width: 34px; height: 60px; object-fit: cover; border-radius: var(--r-sm); }
+
+.thumbRow { display: flex; flex-wrap: wrap; gap: var(--sp-xs); margin-top: 8px; }
+.thumbRow .t { position: relative; width: 54px; height: 54px; border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--ui-line); }
+.thumbRow .t img { width: 100%; height: 100%; object-fit: cover; }
+.thumbRow .t button {
+  position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; padding: 0;
+  border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; font-size: 10px; line-height: 16px;
+}
+.sub.warn:empty { display: none; }
+.sub.warn { color: var(--ui-warn); margin-top: 6px; }
+
+/* ---------------- technical details (collapsed by default) ---------------- */
+.techDetails {
+  border-top: 1px solid var(--ui-line); padding-top: var(--sp-sm); margin-top: 2px;
+}
+.techDetails summary {
+  cursor: pointer; font-size: 12px; font-weight: 700; color: var(--ui-muted);
+  list-style: none; display: flex; align-items: center; gap: 6px; user-select: none;
+}
+.techDetails summary::-webkit-details-marker { display: none; }
+.techDetails summary::before {
+  content: ""; width: 6px; height: 6px; border-inline-end: 2px solid var(--ui-muted);
+  border-bottom: 2px solid var(--ui-muted); transform: rotate(45deg); transition: transform .15s ease;
+}
+.techDetails[open] summary::before { transform: rotate(-135deg); }
+
+.panelFoot {
+  margin: auto 0 0; padding-top: var(--sp-md); font-size: 11px;
+  color: var(--ui-muted); text-align: center; opacity: .8;
+}
+
+/* ---------------- stage ---------------- */
+.stageWrap { display: flex; align-items: flex-start; justify-content: center; padding: var(--sp-lg); overflow: auto; }
+.stageScaler { transform-origin: top center; }
+
+/* The poster itself is ALWAYS 800x1422 -- the exact native size of the
+   real reference posters, so proportions transfer 1:1 instead of being
+   re-guessed at another scale. */
+#poster {
+  width: 800px; height: 1422px; position: relative; overflow: hidden;
+  background: var(--surface); box-shadow: var(--sh-lifted);
+}
+[contenteditable]:hover { box-shadow: 0 0 0 2px rgba(255,255,255,.35); }
+[contenteditable]:focus { outline: none; box-shadow: 0 0 0 2px rgba(255,255,255,.8); }
+
+.p-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.p-veil { position: absolute; inset: 0; }
+
+/* type -- uses the token scale directly, with the DRAMATIC ratios that
+   separate "designed" from "template" */
+.p-display  { font-size: var(--fs-display);  font-weight: 800; line-height: var(--lh-tight); }
+.p-title    { font-size: var(--fs-title);    font-weight: 800; line-height: var(--lh-tight); }
+.p-heading  { font-size: var(--fs-heading);  font-weight: 800; line-height: var(--lh-tight); }
+.p-subtitle { font-size: var(--fs-subtitle); font-weight: 500; line-height: var(--lh-normal); }
+.p-body     { font-size: var(--fs-body);     font-weight: 400; line-height: var(--lh-loose); }
+.p-caption  { font-size: var(--fs-caption);  font-weight: 500; }
+
+/* .p-eyebrow removed -- render.js builds this inline now (see textColumn()
+   in render.js), not via this class. The old rule here also had
+   letter-spacing, which is what broke Arabic glyph joining in the eyebrow
+   badge -- removed everywhere, not just where it was actually firing. */
+.p-datePill {
+  display: inline-block; font-size: var(--fs-caption); font-weight: 700;
+  padding: var(--sp-xs) var(--sp-sm); border-radius: var(--r-sm);
+  border: 1px solid currentColor;
+}
+.p-rule { height: 3px; width: 96px; background: var(--accent); }
+
+/* Text anchored to ONE edge, never centered-by-default -- symmetric
+   centered blocks are a major "auto-generated" tell. */
+.p-block { position: absolute; text-align: right; direction: rtl; }
+
+/* footer logo strip */
+.p-footer {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 92px;
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-lg);
+}
+.p-footer img { height: 34px; }
+.p-footer.on-dark img { filter: brightness(0) invert(1); opacity: .92; }
+.p-topLogo { position: absolute; top: var(--sp-md); inset-inline-end: var(--sp-md); height: 44px; }
+.p-topLogo.on-dark { filter: brightness(0) invert(1); }
+
+/* ornaments -- same shape, color driven by the palette, so they adapt to
+   any occasion instead of being a themed asset kit */
+.p-orn { position: absolute; pointer-events: none; }
+
+/* ---------------- manual drag handles (editor only) ----------------
+   Attached by app.js's attachDragHandles(), never emitted by render.js
+   itself, and force-hidden before every html2canvas capture -- these
+   must never appear in an exported poster. Sits just outside the
+   block's own corner so it doesn't sit on top of (and steal clicks
+   from) the editable text underneath it. */
+.dragHandle {
+  position: absolute; top: -14px; inset-inline-start: -14px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--ui-accent, #0B3D33); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: move; opacity: 0; transition: opacity .12s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,.4); z-index: 40; touch-action: none;
+}
+.dragHandle svg { width: 15px; height: 15px; }
+.dragBlock:hover .dragHandle, .dragHandle:hover, .dragHandle:active { opacity: 1; }
+.dragBlock:hover { outline: 1.5px dashed rgba(255,255,255,.55); outline-offset: 6px; }
